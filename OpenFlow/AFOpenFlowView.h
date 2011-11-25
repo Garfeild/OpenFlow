@@ -73,6 +73,7 @@
 @protocol AFOpenFlowViewDelegate <NSObject>
 @optional
 - (void)openFlowView:(AFOpenFlowView *)openFlowView selectionDidChange:(int)index;
+- (void)openFlowView:(AFOpenFlowView *)openFlowView itemDoubleTapped:(int)index;
 @end
 
 @protocol AFOpenFlowViewDataSource <NSObject>

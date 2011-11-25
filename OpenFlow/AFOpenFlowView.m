@@ -314,6 +314,10 @@ const static CGFloat kReflectionFraction = 0.85;
     AFItemView *targetCover = (AFItemView *)[sender view];
     int number = [targetCover number];
     NSLog(@"Double tapped %d", number);
+  
+  if ( number == selectedCoverView.number )
+    if ( self.viewDelegate != nil && [self.viewDelegate respondsToSelector:@selector(openFlowView:itemDoubleTapped:)] )
+        [self.viewDelegate openFlowView:self itemDoubleTapped:number];
 }
 
 
