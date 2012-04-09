@@ -218,20 +218,30 @@ const static CGFloat kReflectionFraction = 0.85;
 
 - (void)layoutSubviews
 {
-    //    NSLog(@"[%@ %s]", self, _cmd);
     halfScreenWidth = self.bounds.size.width / 2;
     halfScreenHeight = self.bounds.size.height / 2;
     [self setNumberOfImages:numberOfImages]; // resets view bounds and stuff
     CGPoint contentOffset = [self contentOffset];
+  NSLog(@"Offset: %f",contentOffset.x);
     int targetCover = (int) roundf(contentOffset.x / 
 								   [AFOpenFlowGeometry coverSpacing]);
     if (targetCover != selectedCoverView.number) {
         if (targetCover < 0)
+        {
+          NSLog(@"Target cover < 0");
             [self setSelectedCover:0];
+        }
         else if (targetCover >= self.numberOfImages)
-            [self setSelectedCover:self.numberOfImages - 1];
+        {
+          NSLog(@"Target cover out of range");
+          [self setSelectedCover:self.numberOfImages - 1];
+        }
         else
-            [self setSelectedCover:targetCover];
+        {
+          NSLog(@"Target cover is normal number");
+
+          [self setSelectedCover:targetCover];
+        }
     }
 }
 
@@ -287,6 +297,8 @@ const static CGFloat kReflectionFraction = 0.85;
 	// Create a reflection for this image.
 	UIImage *imageWithReflection = [image addImageReflection:kReflectionFraction];
 	NSNumber *coverNumber = [NSNumber numberWithInt:index];
+  if ( imageWithReflection == nil )
+    NSLog(@"Error with image");
 	[coverImages setObject:imageWithReflection forKey:coverNumber];
 	[coverImageHeights setObject:[NSNumber numberWithFloat:image.size.height] forKey:coverNumber];
 	
@@ -328,9 +340,13 @@ const static CGFloat kReflectionFraction = 0.85;
 
 -(void)notifyCoverSelection
 {
+  NSLog(@"Notify");
     // And send the delegate the newly selected cover message.
     if ([self.viewDelegate respondsToSelector:@selector(openFlowView:selectionDidChange:)])
+    {
+      NSLog(@"Delegate");
         [self.viewDelegate openFlowView:self selectionDidChange:selectedCoverView.number];
+    }
 }
 
 - (void)setSelectedCover:(int)newSelectedCover {
@@ -341,6 +357,7 @@ const static CGFloat kReflectionFraction = 0.85;
 	int newLowerBound = MAX(0, newSelectedCover - COVER_BUFFER);
 	int newUpperBound = MIN(self.numberOfImages - 1, newSelectedCover + COVER_BUFFER);
 	if (!selectedCoverView) {
+    NSLog(@"1");
 		// Allocate and display covers from newLower to newUpper bounds.
 		for (int i=newLowerBound; i <= newUpperBound; i++) {
 			cover = [self coverForIndex:i];
@@ -359,6 +376,7 @@ const static CGFloat kReflectionFraction = 0.85;
 	
 	// Check to see if the new & current ranges overlap.
 	if ((newLowerBound > upperVisibleCover) || (newUpperBound < lowerVisibleCover)) {
+    NSLog(@"2");
 		// They do not overlap at all.
 		// This does not animate--assuming it's programmatically set from view controller.
 		// Recycle all onscreen covers.
@@ -386,6 +404,7 @@ const static CGFloat kReflectionFraction = 0.85;
 		[self notifyCoverSelection];
 		return;
 	} else if (newSelectedCover > selectedCoverView.number) {
+    NSLog(@"3");
 		// Move covers that are now out of range on the left to the right side,
 		// but only if appropriate (within the range set by newUpperBound).
 		for (int i=lowerVisibleCover; i < newLowerBound; i++) {
@@ -416,7 +435,10 @@ const static CGFloat kReflectionFraction = 0.85;
 			[self layoutCover:cover selectedCover:newSelectedCover animated:NO];
 		}
 		upperVisibleCover = newUpperBound;
+    
+    [self setContentOffset:CGPointMake(200*newSelectedCover, self.contentOffset.y)];
 	} else {
+    NSLog(@"4");
 		// Move covers that are now out of range on the right to the left side,
 		// but only if appropriate (within the range set by newLowerBound).
 		for (int i=upperVisibleCover; i > newUpperBound; i--) {
@@ -456,6 +478,11 @@ const static CGFloat kReflectionFraction = 0.85;
 	
 	selectedCoverView = (AFItemView *)[onscreenCovers objectForKey:[NSNumber numberWithInt:newSelectedCover]];
     [self notifyCoverSelection];
+}
+
+- (int)currentIndex
+{
+  return selectedCoverView.number;
 }
 
 @end

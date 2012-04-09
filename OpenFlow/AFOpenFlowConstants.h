@@ -35,4 +35,4 @@
 //#define SIDE_COVER_ZPOSITION -90
 //#endif
 
-#define SIDE_COVER_ANGLE .79
+#define SIDE_COVER_ANGLE 60

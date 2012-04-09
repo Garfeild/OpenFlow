@@ -18,11 +18,11 @@
     if (!sideCoverAngle) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            sideCoverAngle = 0.79f;
+            sideCoverAngle = 0.20f;
         }
         else 
         {
-            sideCoverAngle = 0.79f;
+            sideCoverAngle = 0.20f;
         }
     }
     return sideCoverAngle;
@@ -35,11 +35,11 @@
     if (!sideCoverZPosition) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            sideCoverZPosition = -100.0f;
+            sideCoverZPosition = -150.0f;
         }
         else 
         {
-            sideCoverZPosition = -90.0f;
+            sideCoverZPosition = -180.0f;
         }
     }
     return sideCoverZPosition;
@@ -51,11 +51,11 @@
     if (!coverSpacing) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            coverSpacing = 60.0f;
+            coverSpacing = 200.0f;
         }
         else 
         {
-            coverSpacing = 40.0f;
+            coverSpacing = 200.0f;
         }
     }
     return coverSpacing;
