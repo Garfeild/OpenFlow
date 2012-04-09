@@ -40,7 +40,7 @@
 
 @implementation AFOpenFlowView (hidden)
 
-const static CGFloat kReflectionFraction = 0.85;
+const static CGFloat kReflectionFraction = 0.85; // .85
 
 - (void)setUpInitialState {
         
@@ -91,6 +91,7 @@ const static CGFloat kReflectionFraction = 0.85;
 //        [tapGesture setDelegate:self];
         [tapGesture release];
         
+        //UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewDoubleTapped:)];
         UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewDoubleTapped:)];
         [doubleTapGesture setNumberOfTapsRequired:2];
         [coverView addGestureRecognizer:doubleTapGesture];
@@ -112,6 +113,12 @@ const static CGFloat kReflectionFraction = 0.85;
 		if (coverImageHeightNumber)
 			[aCover setImage:coverImage originalImageHeight:[coverImageHeightNumber floatValue] reflectionFraction:kReflectionFraction];
 	} else {
+        
+        if (coverImage ==nil) {
+            NSLog(@"\n\n *****************     IMAGE MISSING OR NOT NAMED CORRECTLY IN XML!!!!  *********************\n\n");
+            defaultImage = [UIImage imageNamed:@"blank.png"];
+        }
+        
 		[aCover setImage:defaultImage originalImageHeight:defaultImageHeight reflectionFraction:kReflectionFraction];
 		[self.dataSource openFlowView:self requestImageForIndex:aCover.number];
 	}
@@ -203,7 +210,7 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)dealloc {
-	[defaultImage release];
+//	[defaultImage release];
 	
 	[coverImages release];
 	[coverImageHeights release];
@@ -288,37 +295,54 @@ const static CGFloat kReflectionFraction = 0.85;
 }
 
 - (void)setDefaultImage:(UIImage *)newDefaultImage {
-	[defaultImage release];
 	defaultImageHeight = newDefaultImage.size.height;
-	defaultImage = [[newDefaultImage addImageReflection:kReflectionFraction] retain];
+	defaultImage = [newDefaultImage addImageReflection:kReflectionFraction];
 }
 
 - (void)setImage:(UIImage *)image forIndex:(int)index {
 	// Create a reflection for this image.
 	UIImage *imageWithReflection = [image addImageReflection:kReflectionFraction];
 	NSNumber *coverNumber = [NSNumber numberWithInt:index];
-  if ( imageWithReflection == nil )
-    NSLog(@"Error with image");
+    if ( imageWithReflection == nil ){
+        NSLog(@" #####  Error with image at carousel image number: %d  ",index);
+        return;
+    }
+    
+    
 	[coverImages setObject:imageWithReflection forKey:coverNumber];
-	[coverImageHeights setObject:[NSNumber numberWithFloat:image.size.height] forKey:coverNumber];
+    
+        [coverImageHeights setObject:[NSNumber numberWithFloat:image.size.height] forKey:coverNumber];
 	
 	// If this cover is onscreen, set its image and call layoutCover.
 	AFItemView *aCover = (AFItemView *)[onscreenCovers objectForKey:[NSNumber numberWithInt:index]];
 	if (aCover) {
-		[aCover setImage:imageWithReflection originalImageHeight:image.size.height reflectionFraction:kReflectionFraction];
+		if(image)[aCover setImage:imageWithReflection originalImageHeight:image.size.height reflectionFraction:kReflectionFraction];
 		[self layoutCover:aCover selectedCover:selectedCoverView.number animated:NO];
 	}
 }
 
 -(void)viewTapped:(UIGestureRecognizer *)sender
 {
+   
+    
+   
     AFItemView *targetCover = (AFItemView *)[sender view];
     int number = [targetCover number];
-    if (targetCover && (number != selectedCoverView.number))
+    NSLog(@"Single tap %d",number);
+
+     /*
+      // Used for setting selecting a carousel item to touched index 
+      if (targetCover && (number != selectedCoverView.number))
     {
         CGPoint selectedOffset = CGPointMake([AFOpenFlowGeometry coverSpacing] * targetCover.number, 0);
         [self setContentOffset:selectedOffset animated:YES];
     }
+     */
+    
+    // Used for opening selected carousel item (previously with open button) 
+    if ( number == selectedCoverView.number )
+        if ( self.viewDelegate != nil && [self.viewDelegate respondsToSelector:@selector(openFlowView:itemDoubleTapped:)] )
+            [self.viewDelegate openFlowView:self itemDoubleTapped:number];
 }
 
 -(void)viewDoubleTapped:(UIGestureRecognizer *)sender
@@ -326,10 +350,13 @@ const static CGFloat kReflectionFraction = 0.85;
     AFItemView *targetCover = (AFItemView *)[sender view];
     int number = [targetCover number];
     NSLog(@"Double tapped %d", number);
-  
+  /*
+   // Used for opening selected carousel item (previously with open button) 
   if ( number == selectedCoverView.number )
     if ( self.viewDelegate != nil && [self.viewDelegate respondsToSelector:@selector(openFlowView:itemDoubleTapped:)] )
         [self.viewDelegate openFlowView:self itemDoubleTapped:number];
+    
+    */
 }
 
 

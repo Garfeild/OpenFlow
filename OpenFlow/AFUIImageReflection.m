@@ -44,7 +44,7 @@
     
     // define the start and end grayscale values (with the alpha, even though
     // our bitmap context doesn't support alpha the gradient requires it)
-    CGFloat colors[] = {0.0, 1.0, 1.0, 1.0};
+    CGFloat colors[] = {0.0, 1.0, 1.0, 0.2}; // origionally {0.0, 1.0, 1.0, 1.0}
     
     // create the CGGradient and then release the gray color space
     CGGradientRef grayScaleGradient = CGGradientCreateWithColorComponents(colorSpace, colors, NULL, 2);

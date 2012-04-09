@@ -61,7 +61,7 @@
 
 @property (nonatomic, assign) IBOutlet id <AFOpenFlowViewDataSource> dataSource;
 @property (nonatomic, assign) IBOutlet id <AFOpenFlowViewDelegate> viewDelegate;
-@property (nonatomic, retain) UIImage *defaultImage;
+@property (nonatomic, assign) UIImage *defaultImage;
 @property (nonatomic, assign) int numberOfImages;
 
 - (void)setSelectedCover:(int)newSelectedCover;

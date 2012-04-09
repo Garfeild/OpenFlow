@@ -7,7 +7,11 @@
 //
 
 #import "AFOpenFlowGeometry.h"
-
+#define SPACING_FOR_COVER 200.0f     // original value: 200.0f
+#define CENTER_OFFSET_FOR_COVER 450.0f    // 70.0f
+#define SIDE_ANGLE_FOR_COVER 0.10f   // 0.20f
+#define SIDE_ZPOS_1_FOR_COVER -100.0f   // -150.0f
+#define SIDE_ZPOS_2_FOR_COVER -130.0f    // -180.0f
 
 @implementation AFOpenFlowGeometry
 
@@ -18,11 +22,11 @@
     if (!sideCoverAngle) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            sideCoverAngle = 0.20f;
+            sideCoverAngle = SIDE_ANGLE_FOR_COVER;
         }
         else 
         {
-            sideCoverAngle = 0.20f;
+            sideCoverAngle = SIDE_ANGLE_FOR_COVER;
         }
     }
     return sideCoverAngle;
@@ -35,11 +39,11 @@
     if (!sideCoverZPosition) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            sideCoverZPosition = -150.0f;
+            sideCoverZPosition = SIDE_ZPOS_1_FOR_COVER;
         }
         else 
         {
-            sideCoverZPosition = -180.0f;
+            sideCoverZPosition = SIDE_ZPOS_2_FOR_COVER;
         }
     }
     return sideCoverZPosition;
@@ -51,11 +55,11 @@
     if (!coverSpacing) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            coverSpacing = 200.0f;
+            coverSpacing = SPACING_FOR_COVER;
         }
         else 
         {
-            coverSpacing = 200.0f;
+            coverSpacing = SPACING_FOR_COVER;
         }
     }
     return coverSpacing;
@@ -67,11 +71,11 @@
     if (!centerCoverOffset) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
-            centerCoverOffset = 70.0f;
+            centerCoverOffset = CENTER_OFFSET_FOR_COVER;
         }
         else 
         {
-            centerCoverOffset = 70.0f;
+            centerCoverOffset = CENTER_OFFSET_FOR_COVER;
         }
     }
     return centerCoverOffset;
