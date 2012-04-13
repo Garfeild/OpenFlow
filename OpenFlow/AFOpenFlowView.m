@@ -496,6 +496,7 @@ const static CGFloat kReflectionFraction = 0.85; // .85
 			[self layoutCover:cover selectedCover:newSelectedCover animated:NO];
 		}
 		lowerVisibleCover = newLowerBound;
+    [self setContentOffset:CGPointMake(200*newSelectedCover, self.contentOffset.y)];
 	}
     
 	if (selectedCoverView.number > newSelectedCover)
